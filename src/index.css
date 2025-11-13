@@ -1,0 +1,35 @@
+:root{
+  --celeste:#1fa2ff;   /* celeste */
+  --celeste-2:#12d8fa; /* degradado opcional */
+  --blanco:#ffffff;
+  --gris-100:#f5f7fb;
+  --gris-400:#94a3b8;
+  --negro:#0f172a;
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--gris-100);
+  color:#111827;
+}
+
+/* Utilidades pequeñas */
+.container{max-width: 1120px; margin: 0 auto; padding: 1rem}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  height: 44px; padding:0 1rem; border:0; border-radius:12px;
+  cursor:pointer; font-weight:600;
+}
+.btn-primary{ background: var(--celeste); color: var(--blanco); }
+.btn-primary:disabled{opacity:.6; cursor:not-allowed}
+
+.input{
+  width:100%; height:44px; padding:.75rem .9rem;
+  border:1px solid #e5e7eb; border-radius:12px; outline:none;
+}
+.input:focus{ border-color: var(--celeste) ; box-shadow: 0 0 0 3px rgba(31,162,255,.15); }
+
+.link{ color: var(--celeste); text-decoration:none; font-weight:600 }
