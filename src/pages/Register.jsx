@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
-import { supabase } from '../../services/supabase'; // ajusta la ruta si es distinta
+import supabase from '../services/supabase'; // ya lo tienes
 
-
-export default function Register(){
+export default function Register() {
   const [f, setF] = useState({
-    nombre:"", apellidos:"", cedula:"", email:"", telefono:"", rol:"", password:"", confirm:""
+    nombre: "", apellidos: "", cedula: "", email: "", telefono: "", rol: "", password: "", confirm: ""
   });
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");   // <<< NUEVO
 
   // ==== Validaciones RF-USU-01-1 ====
   const isEmail = (v) => /^\S+@\S+\.\S+$/.test(v);
@@ -17,12 +17,14 @@ export default function Register(){
   const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/; // 8+, 1 mayús, 1 minús, 1 número
   const passOK = (v) => passRegex.test(v);
 
-  const onChange = (e)=>{
-    const {name, value} = e.target;
-    setF(s=>({...s, [name]: value}));
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setF(s => ({ ...s, [name]: value }));
+    setErrorMsg("");   // limpiar error al escribir
   };
 
   const nav = useNavigate();
+
   const formReady =
     f.nombre &&
     f.apellidos &&
@@ -34,15 +36,66 @@ export default function Register(){
     f.password === f.confirm &&
     !loading;
 
-  const onSubmit = async (e)=>{
+  // <<< NUEVO: función para convertir el rol string al id numérico de tu tabla tbl_rol
+  // AJUSTA estos números a los que tengas en tu BD
+  const getRolId = (rolString) => {
+    switch (rolString) {
+      case "ESTUDIANTE":
+        return 1;
+      case "EMPRENDEDOR":
+        return 2;
+      case "ADMIN":
+        return 3;
+      default:
+        return 1; // por defecto estudiante
+    }
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    if(!formReady) return;
+    if (!formReady) return;
+
     setLoading(true);
-    // Luego: supabase.auth.signUp({ email: f.email, password: f.password }) + tabla profiles
-    setTimeout(()=>{
-      setLoading(false);
+    setErrorMsg("");
+
+    try {
+      const nombreCompleto = `${f.nombre} ${f.apellidos}`.trim();
+      const rolId = getRolId(f.rol);
+
+      // <<< AQUÍ SE HACE EL INSERT EN SUPABASE
+      const { data, error } = await supabase
+        .from('tbl_usuario')
+        .insert([
+          {
+            d_nombre_completo: nombreCompleto,
+            d_num_identificacion: f.cedula,
+            d_correo_electronico: f.email,
+            d_telefono: f.telefono,
+            d_contrasenia: f.password,
+            c_id_rol: rolId,
+            c_id_estado_usuario: 1   // <- EN MINÚSCULAS (NOMBRE REAL DE LA BD)
+          }
+        ])
+        .select();
+      // opcional, por si quieres el registro creado
+
+      if (error) {
+        console.error(error);
+        // Si rompe por UNIQUE en correo o cédula, llegará aquí
+        setErrorMsg(error.message || "Error al crear el usuario.");
+        setLoading(false);
+        return;
+      }
+
+      // Si todo va bien, redirigimos al login
       nav("/login");
-    }, 600);
+
+    } catch (err) {
+      console.error(err);
+      setErrorMsg("Ocurrió un error inesperado al registrar el usuario.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -56,36 +109,36 @@ export default function Register(){
         <form className="form" onSubmit={onSubmit}>
           <label className="label">
             Nombre
-            <input className="input" name="nombre" value={f.nombre} onChange={onChange} required/>
+            <input className="input" name="nombre" value={f.nombre} onChange={onChange} required />
           </label>
 
           <label className="label">
             Apellidos
-            <input className="input" name="apellidos" value={f.apellidos} onChange={onChange} required/>
+            <input className="input" name="apellidos" value={f.apellidos} onChange={onChange} required />
           </label>
 
           <label className="label">
             Cédula
-            <input className="input" name="cedula" value={f.cedula} onChange={onChange} placeholder="9 dígitos" required/>
+            <input className="input" name="cedula" value={f.cedula} onChange={onChange} placeholder="9 dígitos" required />
           </label>
           {f.cedula && !isCedulaCR(f.cedula) && (
-            <small style={{color:"#ef4444"}}>Cédula inválida (9 dígitos).</small>
+            <small style={{ color: "#ef4444" }}>Cédula inválida (9 dígitos).</small>
           )}
 
           <label className="label">
             Correo
-            <input className="input" type="email" name="email" value={f.email} onChange={onChange} required/>
+            <input className="input" type="email" name="email" value={f.email} onChange={onChange} required />
           </label>
           {f.email && !isEmail(f.email) && (
-            <small style={{color:"#ef4444"}}>Correo no válido.</small>
+            <small style={{ color: "#ef4444" }}>Correo no válido.</small>
           )}
 
           <label className="label">
             Número de teléfono
-            <input className="input" name="telefono" value={f.telefono} onChange={onChange} placeholder="88888888" required/>
+            <input className="input" name="telefono" value={f.telefono} onChange={onChange} placeholder="88888888" required />
           </label>
           {f.telefono && !isPhoneCR(f.telefono) && (
-            <small style={{color:"#ef4444"}}>Teléfono inválido (8 dígitos).</small>
+            <small style={{ color: "#ef4444" }}>Teléfono inválido (8 dígitos).</small>
           )}
 
           <label className="label">
@@ -99,21 +152,26 @@ export default function Register(){
           </label>
 
           <label className="label">
-            Contraseña <small style={{color:"#64748b", fontWeight:400}}>8+, 1 mayúscula, 1 minúscula y 1 número</small>
-            <input className="input" type="password" name="password" value={f.password} onChange={onChange} required/>
+            Contraseña <small style={{ color: "#64748b", fontWeight: 400 }}>8+, 1 mayúscula, 1 minúscula y 1 número</small>
+            <input className="input" type="password" name="password" value={f.password} onChange={onChange} required />
           </label>
           {f.password && !passOK(f.password) && (
-            <small style={{color:"#ef4444"}}>
+            <small style={{ color: "#ef4444" }}>
               Debe cumplir: 8+ caracteres, una mayúscula, una minúscula y un número.
             </small>
           )}
 
           <label className="label">
             Confirmar contraseña
-            <input className="input" type="password" name="confirm" value={f.confirm} onChange={onChange} required/>
+            <input className="input" type="password" name="confirm" value={f.confirm} onChange={onChange} required />
           </label>
-          {f.confirm && f.password!==f.confirm && (
-            <small style={{color:"#ef4444"}}>Las contraseñas no coinciden.</small>
+          {f.confirm && f.password !== f.confirm && (
+            <small style={{ color: "#ef4444" }}>Las contraseñas no coinciden.</small>
+          )}
+
+          {/* Mostrar error general si existe */}
+          {errorMsg && (
+            <p style={{ color: "#ef4444", marginTop: "0.5rem" }}>{errorMsg}</p>
           )}
 
           <button className="btn btn-primary" disabled={!formReady}>
