@@ -52,51 +52,64 @@ export default function Register() {
   };
 
   const onSubmit = async (e) => {
-    e.preventDefault();
-    if (!formReady) return;
+  e.preventDefault();
+  if (!formReady) return;
 
-    setLoading(true);
-    setErrorMsg("");
+  setLoading(true);
+  setErrorMsg("");
 
-    try {
-      const nombreCompleto = `${f.nombre} ${f.apellidos}`.trim();
-      const rolId = getRolId(f.rol);
+  try {
+    const nombreCompleto = `${f.nombre} ${f.apellidos}`.trim();
+    const rolId = getRolId(f.rol);
 
-      // <<< AQUÍ SE HACE EL INSERT EN SUPABASE
-      const { data, error } = await supabase
-        .from('tbl_usuario')
-        .insert([
-          {
-            d_nombre_completo: nombreCompleto,
-            d_num_identificacion: f.cedula,
-            d_correo_electronico: f.email,
-            d_telefono: f.telefono,
-            d_contrasenia: f.password,
-            c_id_rol: rolId,
-            c_id_estado_usuario: 1   // <- EN MINÚSCULAS (NOMBRE REAL DE LA BD)
-          }
-        ])
-        .select();
-      // opcional, por si quieres el registro creado
+    // 1) REGISTRO EN SUPABASE AUTH
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      email: f.email,
+      password: f.password,
+    });
 
-      if (error) {
-        console.error(error);
-        // Si rompe por UNIQUE en correo o cédula, llegará aquí
-        setErrorMsg(error.message || "Error al crear el usuario.");
-        setLoading(false);
-        return;
-      }
-
-      // Si todo va bien, redirigimos al login
-      nav("/login");
-
-    } catch (err) {
-      console.error(err);
-      setErrorMsg("Ocurrió un error inesperado al registrar el usuario.");
-    } finally {
-      setLoading(false);
+    if (signUpError) {
+      console.error(signUpError);
+      setErrorMsg(signUpError.message || "Error al registrar en Supabase Auth.");
+      return;
     }
-  };
+
+    // (Opcional) id del usuario de auth, por si después agregas una columna auth_user_id
+    const authUserId = signUpData.user?.id;
+
+    // 2) INSERT EN TU TABLA tbl_usuario
+    const { error: insertError } = await supabase
+      .from("tbl_usuario")
+      .insert([
+        {
+          d_nombre_completo: nombreCompleto,
+          d_num_identificacion: f.cedula,
+          d_correo_electronico: f.email,
+          d_telefono: f.telefono,
+          d_contrasenia: f.password,      // Para el proyecto; en producción NO se guarda plano
+          c_id_rol: rolId,
+          c_id_estado_usuario: 1,        // id del estado ACTIVO
+          // si luego creas una columna auth_user_id:
+          // auth_user_id: authUserId,
+        },
+      ]);
+
+    if (insertError) {
+      console.error(insertError);
+      setErrorMsg(insertError.message || "Error al guardar los datos del usuario.");
+      return;
+    }
+
+    // OK: redirigimos a login
+    nav("/login");
+  } catch (err) {
+    console.error(err);
+    setErrorMsg("Ocurrió un error inesperado al registrar el usuario.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <main className="login-wrap">
