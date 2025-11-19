@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import ResetPassword from "./pages/ResetPassword"; // o la ruta donde lo pongas
+import EditarPerfil from "./pages/EditarPerfil";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/perfil" element={<EditarPerfil />} />
       </Routes>
     
   );

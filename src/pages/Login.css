@@ -44,3 +44,180 @@
 @media (min-width: 768px){
   .login-card{ padding: 2.25rem }
 }
+
+
+/* --- HOME DASHBOARD --- */
+
+.home-card{
+  max-width: 960px;            /* más ancho que el login */
+}
+
+.home-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: .75rem;
+}
+
+.home-header-right{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: flex-end;
+}
+
+.home-divider{
+  border: none;
+  border-top: 1px solid rgba(148,163,184,.35); /* gris-400 aprox */
+  margin: .75rem 0 1.25rem;
+}
+
+.home-section{
+  margin-bottom: 1.5rem;
+}
+
+.home-section-title{
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: .75rem;
+  color: #0f172a;
+}
+
+.home-profile{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.home-profile-data p{
+  margin: .15rem 0;
+}
+
+/* GRID DE MÓDULOS */
+
+.home-grid{
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  gap: .75rem;
+}
+
+.home-module{
+  display: block;
+  padding: .9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(148,163,184,.35);
+  text-decoration: none;
+  background: #f9fafb;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.home-module h3{
+  margin: 0 0 .25rem;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.home-module p{
+  margin: 0;
+  font-size: .9rem;
+  color: var(--gris-400);
+}
+
+.home-module:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(15,23,42,.12);
+  border-color: var(--celeste);
+}
+
+/* variantes simples por rol */
+
+.home-module-alt{
+  background: #ecfeff; /* celeste muy claro */
+}
+
+.home-module-admin{
+  background: #fef3c7; /* amarillo muy claro */
+}
+
+/* Pills / botones */
+
+.pill{
+  padding: .15rem .6rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 600;
+  border: 1px solid rgba(148,163,184,.45);
+}
+
+.pill-rol{
+  background: #e0f2fe;
+  border-color: #38bdf8;
+}
+
+.pill-estado{
+  background: #eef2ff;
+  border-color: #6366f1;
+}
+
+.btn-primary,
+.btn-outline{
+  padding: .5rem .9rem;
+  border-radius: 999px;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary{
+  border: none;
+  background: var(--celeste);
+  color: var(--blanco);
+}
+
+.btn-primary:hover{
+  filter: brightness(1.05);
+}
+
+.btn-outline{
+  border: 1px solid var(--celeste);
+  background: transparent;
+  color: var(--celeste);
+}
+
+.btn-outline:hover{
+  background: rgba(56,189,248,.08);
+}
+
+.error-msg{
+  margin-bottom: .5rem;
+  font-size: .85rem;
+  color: #b91c1c;
+}
+
+.success-msg{
+  margin-bottom: .5rem;
+  font-size: .85rem;
+  color: #15803d;
+}
+
+
+/* responsive */
+
+@media (min-width: 768px){
+  .home-grid{
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+
+  .home-card{
+    padding: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px){
+  .home-grid{
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+}
