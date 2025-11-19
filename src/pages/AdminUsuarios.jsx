@@ -116,7 +116,6 @@ export default function AdminUsuarios() {
   const toggleEstado = async (usuario) => {
     if (!usuario) return;
 
-    // (opcional) evitar que el admin se desactive a sí mismo
     if (authUser && usuario.d_correo_electronico === authUser.email) {
       setErrorMsg("No puedes desactivar tu propia cuenta.");
       return;
@@ -167,6 +166,7 @@ export default function AdminUsuarios() {
   return (
     <div className="login-wrap">
       <div className="login-card home-card">
+        
         {/* Encabezado */}
         <header className="home-header">
           <div className="brand">
@@ -233,6 +233,7 @@ export default function AdminUsuarios() {
           {!loading && usuarios.length > 0 && (
             <div className="admin-table-wrap">
               <table className="admin-table">
+                
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -244,6 +245,7 @@ export default function AdminUsuarios() {
                     <th>Acción</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {usuarios.map((u) => {
                     const esActivo = u.c_id_estado_usuario === ID_ESTADO_ACTIVO;
@@ -253,12 +255,14 @@ export default function AdminUsuarios() {
 
                     return (
                       <tr key={u.c_id_usuario}>
-                        <td>{u.c_id_usuario}</td>
-                        <td>{u.d_nombre_completo}</td>
-                        <td>{u.d_correo_electronico}</td>
-                        <td>{u.d_num_identificacion}</td>
-                        <td>{u.c_id_rol ?? "—"}</td>
-                        <td>
+
+                        <td data-label="ID">{u.c_id_usuario}</td>
+                        <td data-label="Nombre">{u.d_nombre_completo}</td>
+                        <td data-label="Correo">{u.d_correo_electronico}</td>
+                        <td data-label="Identificación">{u.d_num_identificacion}</td>
+                        <td data-label="Rol">{u.c_id_rol ?? "—"}</td>
+
+                        <td data-label="Estado">
                           <span
                             className={
                               esActivo
@@ -272,7 +276,8 @@ export default function AdminUsuarios() {
                             <span className="badge badge-yo">Tú</span>
                           )}
                         </td>
-                        <td>
+
+                        <td data-label="Acción">
                           <button
                             type="button"
                             className={esActivo ? "btn-outline" : "btn-primary"}
@@ -286,14 +291,17 @@ export default function AdminUsuarios() {
                               : "Activar"}
                           </button>
                         </td>
+
                       </tr>
                     );
                   })}
                 </tbody>
+
               </table>
             </div>
           )}
         </section>
+
       </div>
     </div>
   );

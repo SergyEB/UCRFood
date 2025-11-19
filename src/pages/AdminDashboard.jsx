@@ -44,6 +44,10 @@ export default function AdminDashboard() {
     init();
   }, [navigate]);
 
+  const handleVolverHome = () => {
+    navigate("/home");
+  };
+
   if (loading) {
     return (
       <div className="login-wrap">
@@ -57,14 +61,23 @@ export default function AdminDashboard() {
   return (
     <div className="login-wrap">
       <div className="login-card home-card">
-        <div className="brand">
-          <div className="logo">
-            UCR<span>Food</span>
+        {/* HEADER con botón a la derecha (usa las mismas clases que Home.jsx) */}
+        <header className="home-header">
+          <div>
+            <div className="brand">
+              <div className="logo">
+                UCR<span>Food</span>
+              </div>
+              <p className="subtitle">Panel de administración</p>
+            </div>
           </div>
-          <p className="subtitle">
-            Panel de administración
-          </p>
-        </div>
+
+          <div className="home-header-right">
+            <button className="btn-outline" onClick={handleVolverHome}>
+              Volver al inicio
+            </button>
+          </div>
+        </header>
 
         {errorMsg && <p className="error-msg">{errorMsg}</p>}
 

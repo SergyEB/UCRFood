@@ -294,3 +294,75 @@
     display:none; /* oculta ID en pantallas muy pequeñas */
   }
 }
+
+
+/* --- Vista móvil para AdminUsuarios (tabla -> tarjetas) --- */
+@media (max-width: 768px) {
+
+  .admin-table {
+    border: 0;
+  }
+
+  .admin-table thead {
+    display: none; /* escondemos encabezados */
+  }
+
+  .admin-table tbody tr {
+    display: block;
+    margin-bottom: .9rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(15,23,42,.10);
+    background: #ffffff;
+    padding: .55rem .75rem;
+  }
+
+  .admin-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .admin-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .25rem 0;
+    border: none;
+    white-space: normal;
+  }
+
+  .admin-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: .8rem;
+    color: #6b7280; /* gris medio */
+    margin-right: .75rem;
+  }
+
+  /* Que el botón ocupe todo el ancho de la tarjeta en móvil */
+  .admin-table td[data-label="Acción"] {
+    margin-top: .35rem;
+  }
+
+  .admin-table td[data-label="Acción"] button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* espaciado general del card */
+  .home-card {
+    padding: 1.5rem;
+  }
+
+  .admin-search-row {
+    flex-direction: column;
+  }
+
+  .admin-search-row input {
+    width: 100%;
+  }
+
+  .admin-search-row .btn-primary,
+  .admin-search-row .btn-outline {
+    width: 100%;
+    text-align: center;
+  }
+}
