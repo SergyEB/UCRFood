@@ -223,3 +223,74 @@
 }
 
 
+.admin-search-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.admin-search-row input{
+  flex: 1 1 200px;
+  padding: .5rem .75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,.6);
+  font-size: .9rem;
+}
+
+.admin-table-wrap{
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+
+.admin-table th,
+.admin-table td{
+  padding: .45rem .6rem;
+  border-bottom: 1px solid rgba(148,163,184,.35);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.admin-table th{
+  font-weight: 700;
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+.badge{
+  display: inline-block;
+  padding: .1rem .45rem;
+  border-radius: 999px;
+  font-size: .7rem;
+  font-weight: 600;
+  margin-right: .25rem;
+}
+
+.badge-activo{
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-inactivo{
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.badge-yo{
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+/* un poco de resposivo */
+@media (max-width: 640px){
+  .admin-table th:nth-child(1),
+  .admin-table td:nth-child(1){
+    display:none; /* oculta ID en pantallas muy pequeñas */
+  }
+}
