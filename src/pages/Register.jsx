@@ -14,7 +14,7 @@ export default function Register() {
   const isEmail = (v) => /^\S+@\S+\.\S+$/.test(v);
   const isPhoneCR = (v) => /^\d{8}$/.test(v);          // 8 dígitos
   const isCedulaCR = (v) => /^\d{9}$/.test(v);         // 9 dígitos (ajusta si tu formato difiere)
-  const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/; // 8+, 1 mayús, 1 minús, 1 número
+  const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/; // 8+, 1 mayús, 1 minúscula, 1 número
   const passOK = (v) => passRegex.test(v);
 
   const onChange = (e) => {
@@ -42,10 +42,10 @@ export default function Register() {
     switch (rolString) {
       case "ESTUDIANTE":
         return 1;
-      case "EMPRENDEDOR":
-        return 2;
       case "ADMIN":
         return 3;
+      case "EXTERNO":
+        return 4; // Usuario externo
       default:
         return 1; // por defecto estudiante
     }
@@ -159,8 +159,8 @@ export default function Register() {
             <select className="input" name="rol" value={f.rol} onChange={onChange} required>
               <option value="">Selecciona…</option>
               <option value="ESTUDIANTE">Estudiante</option>
-              <option value="EMPRENDEDOR">Emprendedor</option>
               <option value="ADMIN">Administrativo</option>
+              <option value="EXTERNO">Usuario externo</option>
             </select>
           </label>
 

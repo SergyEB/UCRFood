@@ -62,6 +62,8 @@ export default function Home() {
         return "Emprendedor";
       case 3:
         return "Administrador";
+      case 4:
+        return "Usuario externo";
       default:
         return `Rol #${rolId}`;
     }
@@ -176,17 +178,19 @@ export default function Home() {
               <p>Edita tus datos de contacto y preferencias.</p>
             </Link>
 
-            {/* Módulos de emprendedor */}
+            {/* Módulo "Mi negocio" para Emprendedor y Usuario externo */}
+            {(rolLabel === "Emprendedor" || rolLabel === "Usuario externo") && (
+              <Link
+                to="/mi-negocio"
+                className="home-module home-module-alt"
+              >
+                <h3>Mi negocio</h3>
+                <p>Gestiona los datos de tu emprendimiento.</p>
+              </Link>
+            )}
+
             {rolLabel === "Emprendedor" && (
               <>
-                <Link
-                  to="/emprendedor/negocio"
-                  className="home-module home-module-alt"
-                >
-                  <h3>Mi negocio</h3>
-                  <p>Gestiona los datos de tu emprendimiento.</p>
-                </Link>
-
                 <Link
                   to="/emprendedor/menus"
                   className="home-module home-module-alt"

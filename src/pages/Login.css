@@ -366,3 +366,47 @@
     text-align: center;
   }
 }
+
+
+.negocio-estado-box{
+  margin-bottom: 1rem;
+  padding: .5rem .75rem;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid rgba(148,163,184,.4);
+}
+
+.negocio-estado-msg{
+  margin: .35rem 0 0;
+  font-size: .85rem;
+  color: #4b5563;
+}
+
+/* badges adicionales para estados */
+.badge-pendiente{
+  background: #fef9c3;
+  color: #92400e;
+}
+
+.badge-rechazado{
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* (badge-activo y badge-inactivo ya los usarías del admin) */
+
+
+.admin-actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+/* En móvil que ocupen ancho completo */
+@media (max-width: 768px){
+  .admin-actions .btn-primary,
+  .admin-actions .btn-outline{
+    width: 100%;
+    justify-content: center;
+  }
+}
